@@ -1,57 +1,24 @@
 import java.util.*;
 
 public class Record {
-  private HashMap<String,String> data = new HashMap<String,String>();
+  private ArrayList<String> column_names = new ArrayList<String>();
+  private ArrayList<String> values = new ArrayList<String>();
 
-  public Record(String stateJson){
-      parseJson(stateJson);
+  public Record(String[] columns, String[] arr_values){
+      for(String c: columns)
+        column_names.add(c.replace("\"",""));
+      for(String v : arr_values)
+        values.add(v.replace("\"",""));
   }
 
-  private String removeQuotesBackSlashes(String item){
-        item = removeCharacters(item, "\"");
-        return removeCharacters(item, "\\");
-  }
-
-  private String removeCharacters(String item, String character){
-        while(item.indexOf(character) != -1){  
-            int q = item.indexOf(character);
-            item = item.substring(0, q) + item.substring(q + 1); //remove
-        }
-        return item;
-  }
-
-  private void addToMap(String[] kv){
-      data.put(kv[0], kv[1]); 
-  }
-
-  public String getValueByKey(String key){
-      String d = data.get(key);
-      if(d.equals("null"))
-        d = "0";
-      return d; 
-  }
-
-
-  private void parseJson(String json){
-      json=removeQuotesBackSlashes(json);
-      String[] kv = json.split(",");          
-      for(String i : kv){
-       
-          if(i.indexOf(":") != -1){
-            String[] items = i.split(":");
-            try{
-              addToMap(items);
-            }catch(Exception e){
-              addToMap(new String[]{i, null});
-            }
-          }
-      }
+  public String getValueByIndex(int index){
+      return values.get(index); 
   }
 
   public String toString(){
       String s = "===== Record: \n";
-      for(String key: data.keySet()){
-          s += key + " : " + data.get(key) + "\n";
+      for(String v: values){
+          s += v + "\n";
       }
       
       return s;

@@ -1,30 +1,25 @@
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel; 
-import org.jfree.chart.JFreeChart; 
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.CategoryDataset; 
-import org.jfree.data.category.DefaultCategoryDataset; 
-import org.jfree.ui.ApplicationFrame; 
-import org.jfree.chart.renderer.category.BarRenderer;
-import org.jfree.chart.plot.CategoryPlot;
-import java.awt.*;
+import org.jfree.chart.*;
+import org.jfree.chart.plot.*;
+import org.jfree.data.category.*; 
+import org.jfree.ui.*; 
 import java.util.*;
 
 public class BarChartRender extends ApplicationFrame {
   //LOOK HERE
-  private ImportData id = new ImportData();
+  private ImportData id = new ImportData("https://think.cs.vt.edu/corgis/datasets/csv/airlines/airlines.csv");
   
   //STUDY THIS
   public BarChartRender() {
-      super( "Covid Test Tracking" );        
+      super( "Name Your Chart" );        
       JFreeChart barChart = ChartFactory.createBarChart(
-         "Number of tests per state",           
-         "State",            
-         "Total Tests",            
-         createDataset(ct.getData()),    //NOTICE THIS !      
+         "YOUR TITLE",           
+         "NAME OF X-AXIS",            
+         "NAME OF Y-AXIS",            
+         createDataset(id.getData()),    //NOTICE THIS !      
          PlotOrientation.VERTICAL,           
          true, true, false);
-         
+      
+      //HOW TO COLOR BARS
       // CategoryPlot plot = barChart.getCategoryPlot();
       // BarRenderer renderer = (BarRenderer) plot.getRenderer();
 
@@ -37,45 +32,31 @@ public class BarChartRender extends ApplicationFrame {
       // renderer.setSeriesPaint(2, color2);
 
 
-      // ChartPanel chartPanel = new ChartPanel( barChart );        
-      // chartPanel.setPreferredSize(new java.awt.Dimension( 560 , 367 ) );        
-      // setContentPane( chartPanel ); 
-      // this.pack( );          
-      // this.setVisible( true ); 
+      ChartPanel chartPanel = new ChartPanel( barChart );        
+      chartPanel.setPreferredSize(new java.awt.Dimension( 560 , 367 ) );        
+      setContentPane( chartPanel ); 
+      this.pack( );          
+      this.setVisible( true ); 
    }
    
-   private CategoryDataset createDataset(ArrayList<Record> records ) {      
+   private CategoryDataset createDataset(ArrayList<Record> records) {      
       DefaultCategoryDataset dataset = new DefaultCategoryDataset( );  
 
-      //1. Create a dataset --
+      //Create a dataset --
+      for(Record r : records){
+         String airport = r.getValueByIndex(0);
+         String month = r.getValueByIndex(4);
+         String year = r.getValueByIndex(5);
+         int delaysCarrier = Integer.parseInt(r.getValueByIndex(6));
 
-      // Record s = records.get(0);
-      // int total = Integer.parseInt(s.getValueByKey("total"));
-      // int neg = Integer.parseInt(s.getValueByKey("negative")) ;
-      // int pos = Integer.parseInt(s.getValueByKey("positive")) ;
-   
-      // String state = s.getValueByKey("state");
-      // dataset.addValue(total, "Total", state);
-      // dataset.addValue(neg, "Negative", state);
-      // dataset.addValue(pos, "Positive", state);
-      
-      dataset.addValue(Integer.parseInt("44000"), "Total", "WA");
-      dataset.addValue(Integer.parseInt("40000"), "Negative", "WA");
-      dataset.addValue(Integer.parseInt("4000"), "Positive", "WA");
-      
-      dataset.addValue(Integer.parseInt("35000"), "Total", "VI");
-      dataset.addValue(Integer.parseInt("30000"), "Negative", "VI");
-      dataset.addValue(Integer.parseInt("5000"), "Positive", "VI");
-
-
-
-      //2. Now run it -- takes a while ...
-      //3. Set up for tonight piece:
-      //      a. Get any record from states list -- do you get this?
-      //      b. Get the state abbr
-      //      c. Get the total tests value
-      //4. You job is to loop over the entire states list and set up the dataset so it renders everything
+         if(airport.equals("SFO") && month.equals("January")){
+            dataset.addValue(delaysCarrier, airport, year);
+         }
+      }
       return dataset; 
    }
 
+   public static void main(String[] args) {
+      new BarChartRender();
+   }
 }
