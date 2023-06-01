@@ -6,15 +6,15 @@ import java.util.*;
 
 public class BarChartProject extends ApplicationFrame {
   //LOOK HERE
-  private ImportData id = new ImportData("https://think.cs.vt.edu/corgis/datasets/csv/opioids/opioids.csv");
+  private ImportData id = new ImportData("https://think.cs.vt.edu/corgis/datasets/csv/graduates/graduates.csv");
   
   //STUDY THIS
   public BarChartProject() {
       super( "Name Your Chart" );        
       JFreeChart barChart = ChartFactory.createBarChart(
-         "Synthetic and Prescription Opioid Overdose Deaths",           
+         "CS Majors by Ethnicity, By Year",           
          "Years",            
-         "Overdose Deaths",            
+         "Number of Ethnicities",            
          createDataset(id.getData()),    //NOTICE THIS !      
          PlotOrientation.VERTICAL,           
          true, true, false);
@@ -45,9 +45,12 @@ public class BarChartProject extends ApplicationFrame {
       //Create a dataset --
       for(Record r : records){
          String year = r.getValueByIndex(0);
-         int prescription = Integer.parseInt(r.getValueByIndex(3));
-         int synthetic = Integer.parseInt(r.getValueByIndex(4));
+         int asian= Integer.parseInt(r.getValueByIndex(9));
+         int minority = Integer.parseInt(r.getValueByIndex(10));
+         int white = Integer.parseInt(r.getValueByIndex(11));
+         String major = (r.getValueByIndex(2));
          
+
 
          if(major.equals("Computer Science and Math")){
             dataset.addValue(asian, "asian", year);
@@ -55,7 +58,8 @@ public class BarChartProject extends ApplicationFrame {
             dataset.addValue(white, "white", year);
          }
       }
-      return dataset; 
+      System.out.println(dataset);
+      return dataset;
    }
 
    public static void main(String[] args) {

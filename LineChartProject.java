@@ -6,15 +6,15 @@ import java.util.*;
 
 public class LineChartProject extends ApplicationFrame {
   //LOOK HERE
-  private ImportData id = new ImportData("https://think.cs.vt.edu/corgis/datasets/csv/graduates/graduates.csv");
+  private ImportData id = new ImportData("https://think.cs.vt.edu/corgis/datasets/csv/opioids/opioids.csv");
   
   //STUDY THIS
   public LineChartProject() {
       super( "Name Your Chart" );        
       JFreeChart lineChart = ChartFactory.createLineChart(
-         "Computer Science Degree by Ethnicity",           
+         "Types of Opioid Overdose",           
          "Years",            
-         "Computer Science Degrees",            
+         "Number of Deaths",            
          createDataset(id.getData()),    //NOTICE THIS !      
          PlotOrientation.VERTICAL,           
          true, true, false);
@@ -45,21 +45,19 @@ public class LineChartProject extends ApplicationFrame {
       //Create a dataset --
       for(Record r : records){
          String year = r.getValueByIndex(0);
-         String major = r.getValueByIndex(2);
-         int asian = Integer.parseInt(r.getValueByIndex(9));
-         int minority = Integer.parseInt(r.getValueByIndex(10));
-         int white = Integer.parseInt(r.getValueByIndex(11));
+         int prescription = Integer.parseInt(r.getValueByIndex(3));
+         int synthetic = Integer.parseInt(r.getValueByIndex(4));
+       
 
-         if(major.equals("Computer Science and Math")){
-            dataset.addValue(asian, major, year);
-            dataset.addValue(minority, major, year);
-            dataset.addValue(white, major, year);
-         }
+
+         
+            dataset.addValue(prescription, "Prescription", year);
+            dataset.addValue(synthetic, "Synthetic", year);
+           
       }
-      return dataset; 
-   }
+      return dataset;}
 
    public static void main(String[] args) {
-      new BarChartProject();
+      new LineChartProject();
    }
 }
